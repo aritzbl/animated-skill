@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/personaje.css" />
+    <style>
+      /* Inter (licencia OFL) copiada de los archivos locales de HyperFrames: no se descarga nada. */
+      @font-face { font-family: "Fuente"; font-weight: 400; src: url("assets/fonts/Fuente-400.woff2") format("woff2"); }
+      @font-face { font-family: "Fuente"; font-weight: 700; src: url("assets/fonts/Fuente-700.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #FFF4DE; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Fuente", sans-serif; color: #262033; }
+      .titulo { position: absolute; left: 30px; top: 18px; font-size: 30px; font-weight: 700; }
+      .sub { position: absolute; left: 30px; top: 54px; font-size: 16px; color: #6a6478; }
+      .dia { position: absolute; width: 78px; font-size: 22px; font-weight: 700; text-align: center; }
+      .celda { position: absolute; width: 150px; height: 88px; background: #fff; border-radius: 12px; overflow: hidden; }
+      .celda svg { position: absolute; left: 0; top: 0; }
+      .flecha { position: absolute; width: 40px; text-align: center; font-size: 30px; font-weight: 700; color: #6a6478; }
+      .nombre { position: absolute; font-size: 24px; font-weight: 700; }
+      .tipo { position: absolute; font-size: 17px; font-weight: 700; padding: 3px 12px; border-radius: 12px; border: 3px solid #262033; }
+      .estetica { background: #F2C29B; }
+      .habito { background: #F4B63A; }
+      .skill { background: #A8D8C0; }
+      .pie { position: absolute; left: 30px; bottom: 18px; font-size: 16px; color: #6a6478; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="hoja-mejoras" data-start="0" data-duration="2" data-width="1080" data-height="1920">
+      <div id="lamina" class="clip" data-start="0" data-duration="2" data-track-index="0" data-layout-allow-overflow>
+        <div class="titulo">Mejoras episodio a episodio</div>
+        <div class="sub">Antes y después de cada mejora. El día es el de la tabla por defecto: se mueve con lo que vote el público (Personaje.MEJORAS).</div>
+        <div class="pie">estética = se ve en el cuerpo · hábito = cambia algo que hace o lleva (el objeto del hábito, la postura) · skill = accesorio de lo que aprendió</div>
+      </div>
+    </div>
+
+    <script src="assets/personaje-markup.js"></script>
+    <script src="assets/personaje.js"></script>
+    <script>
+      // Recorte de cada mejora (viewBox del rig, 400 x 640). Cada mejora nueva de Personaje.MEJORAS necesita su entrada acá
+      var CABEZA = "88 44 224 214", TORSO = "92 196 216 230", PIES = "110 470 180 140", PECHO = "92 190 216 240", MANO = "70 280 120 120", POSTURA = "70 50 260 330";
+      var RECORTE = {
+        "duerme-1": CABEZA, "lava-pelo": CABEZA, "lava-ropa": TORSO, "birome": CABEZA, "piel-1": CABEZA,
+        "zapatillas": PIES, "sin-habito": PECHO, "corta-pelo": CABEZA, "duerme-2": CABEZA, "camisa": PECHO,
+        "credencial": PECHO, "piel-2": CABEZA, "anteojos": CABEZA, "reloj": MANO, "corbata": PECHO, "postura-1": POSTURA, "postura-2": POSTURA, "postura-3": POSTURA,
+      };
+      var CLASE = { "estética": "estetica", "hábito": "habito", "skill": "skill" };
+      var lamina = document.getElementById("lamina");
+      var n = 0;
+
+      function celda(x, y, ids, vb) {
+        var c = document.createElement("div");
+        c.className = "celda";
+        c.style.left = x + "px";
+        c.style.top = y + "px";
+        lamina.appendChild(c);
+        var svg = Personaje.mount(c, { uid: "m" + (n++), viewBox: vb, width: "150px", height: "88px", mejoras: ids, expr: "cansado" });
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+      }
+      function texto(cls, x, y, txt) {
+        var d = document.createElement("div");
+        d.className = cls;
+        d.style.left = x + "px";
+        d.style.top = y + "px";
+        d.textContent = txt;
+        lamina.appendChild(d);
+        return d;
+      }
+
+      Personaje.MEJORAS.forEach(function (m, i) {
+        var y = 92 + i * 98;
+        texto("dia", 24, y + 30, "DÍA " + m.dia);
+        celda(112, y, Personaje.antesDe(m.id), RECORTE[m.id]);
+        texto("flecha", 266, y + 20, "→");
+        celda(316, y, Personaje.hasta(m.id), RECORTE[m.id]);
+        texto("nombre", 490, y + 8, m.nombre);
+        texto("tipo " + CLASE[m.tipo], 490, y + 46, m.tipo);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      tl.to({}, { duration: 2 }, 0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["hoja-mejoras"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

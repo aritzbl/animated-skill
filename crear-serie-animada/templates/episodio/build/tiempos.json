@@ -1,0 +1,7 @@
+{
+  "_nota": "Tiempos del episodio. 'inicio' = segundo del episodio en que arranca cada audio. 'linea' = línea de voz (nombre en build/voz-palabras.json). 't0'/'t1' de cada tarjeta son segundos RELATIVOS al inicio de su audio (salen de Whisper por palabra con node build/alinear-tarjetas.mjs). Las palabras: ['TEXTO'], ['TEXTO','n'] = número en amarillo, ['TEXTO','k'] = palabra clave en rojo. 'punch': true = tarjeta más grande con rebote. 'fijo': true = no se recalcula. Tarjetas de 1 a 3 palabras y una o dos líneas (unos 12 caracteres por línea). Si cambia la voz: node build/alinear-tarjetas.mjs, ajustar 'inicio' acá, node build/armar-index.mjs, node build/generar-subtitulos.mjs",
+  "voces": [
+  ],
+  "tarjetas": [
+  ]
+}

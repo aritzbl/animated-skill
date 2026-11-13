@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/personaje.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #2B2540; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #2B2540; }
+      .esc { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 1; }
+      #subt { z-index: 5; }
+      #hud { z-index: 6; }
+    </style>
+  </head>
+  <body>
+    <!-- Reels 9:16, 1080x1920, 30 fps. Las escenas, los subtítulos, el HUD y las voces las escribe build/armar-index.mjs
+         desde build/escenas.json y build/tiempos.json: no editar lo que está entre las marcas. -->
+    <div id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1080" data-height="1920">
+      <!-- ESCENAS:INICIO -->
+      <!-- ESCENAS:FIN -->
+
+      <!-- VOCES:INICIO -->
+      <!-- VOCES:FIN -->
+    </div>
+
+    <script src="assets/personaje-markup.js"></script>
+    <script src="assets/personaje.js"></script>
+    <script src="assets/helpers.js"></script>
+    <script src="assets/voz-palabras.js"></script>
+    <script src="assets/episodio-tiempos.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

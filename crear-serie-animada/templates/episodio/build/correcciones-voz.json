@@ -1,0 +1,3 @@
+{
+  "_nota": "Arreglos manuales de lo que dice Whisper. Se aplican en cada build/importar-voces.mjs, así no hay que repetirlos. Por línea: 'quitar' (palabras inventadas), 'renombrar' (texto mal reconocido -> correcto), 'ini' (segundo real en que arranca una palabra; 'palabra#2' para la segunda vez que aparece), 'texto' (texto completo corregido). build/afinar-inicios.mjs --aplicar escribe 'ini' acá."
+}

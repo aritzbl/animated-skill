@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/personaje.css" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #FFF1DC; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      #pared { position: absolute; left: 0; top: 0; width: 1080px; height: 1595px; background: #FFF1DC; }
+      #zocalo { position: absolute; left: 0; top: 1595px; width: 1080px; height: 30px; background: #E6C99B; }
+      #piso { position: absolute; left: 0; top: 1625px; width: 1080px; height: 295px; background: #EBD5B5; }
+      #host { position: absolute; left: 90px; top: 300px; width: 900px; height: 1440px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="5" data-width="1080" data-height="1920">
+      <div id="pared" class="clip" data-start="0" data-duration="5" data-track-index="0"></div>
+      <div id="zocalo" class="clip" data-start="0" data-duration="5" data-track-index="0"></div>
+      <div id="piso" class="clip" data-start="0" data-duration="5" data-track-index="0"></div>
+      <div id="host" class="clip" data-start="0" data-duration="5" data-track-index="1" data-layout-allow-overflow></div>
+    </div>
+
+    <script src="assets/personaje-markup.js"></script>
+    <script src="assets/personaje.js"></script>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const g = Personaje.mount(document.getElementById("host"), {
+        width: "900px", overflow: true, pose: "caminando", expr: "neutro", giro: "tresCuartosD",
+      });
+      const mundo = Personaje.part(g, "mundo");
+
+      // ---- 0,00 a 2,31 s: entra caminando desde la izquierda (andar de pera, 3/4 hacia la derecha)
+      gsap.set(mundo, { x: -380 });
+      tl.to(mundo, { x: 0, duration: 2.31, ease: "none" }, 0);
+      const finCamina = Personaje.walk(tl, g, 0, 11, 0.84, 0);   // 11 pasos de 0,21 s
+
+      // ---- 2,31 s: frena, la cabeza vuelve al frente (aterriza con rebote)
+      Personaje.poseTo(tl, g, "parado", finCamina, 0.26, "back.out(1.6)");
+      Personaje.giroTo(tl, g, "frente", finCamina, 0.26, "sine.inOut");
+
+      // ---- 2,50 s: anticipación y saludo con la mano derecha de la pantalla
+      Personaje.poseTo(tl, g, "saludo", 2.6, 0.3, "back.out(1.5)");
+      Personaje.wave(tl, g, 2.95, 5, 0.26);
+
+      // ---- "Hola": O, A, E, cerrada
+      Personaje.bocaAt(tl, g, "redonda", 2.78);
+      Personaje.bocaAt(tl, g, "abierta", 2.92);
+      Personaje.bocaAt(tl, g, "ancha", 3.1);
+      Personaje.bocaAt(tl, g, "abierta", 3.26);
+      Personaje.bocaAt(tl, g, "cerrada", 3.42);
+
+      // ---- 3,45 s: queda con una media sonrisa orgullosa
+      Personaje.exprTo(tl, g, "orgulloso", 3.45, 0.3, "sine.inOut");
+
+      // ---- 4,25 s: baja el brazo y vuelve a parado
+      Personaje.poseTo(tl, g, "parado", 4.25, 0.4, "sine.inOut");
+      Personaje.exprTo(tl, g, "neutro", 4.4, 0.4, "sine.inOut");
+
+      // ---- parpadeos (solo donde no se pisan con un cambio de expresión)
+      Personaje.blink(tl, g, 1.1, Personaje.EXPR.neutro.lid);
+      Personaje.blink(tl, g, 3.85, Personaje.EXPR.orgulloso.lid);
+      Personaje.blink(tl, g, 4.85, Personaje.EXPR.neutro.lid);
+
+      // ---- idle: respiración todo el tiempo
+      Personaje.breathe(tl, g, 0, 5, 1.6);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

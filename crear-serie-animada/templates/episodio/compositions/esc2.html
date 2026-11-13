@@ -1,0 +1,62 @@
+<template>
+  <!-- ESCENA PLANTILLA: voto. Dos opciones de una palabra y un cartel "COMENTÁ UNA PALABRA". Copiala y cambiá los textos.
+       Es la mecánica de la serie: lo más votado se resuelve en el episodio siguiente. -->
+  <style>
+    @font-face { font-family: "Fuente"; font-weight: 700; src: url("assets/fonts/Fuente-700.woff2") format("woff2"); }
+    #root { position: absolute; inset: 0; overflow: hidden; background: #FFF1DC; font-family: "Fuente", sans-serif; color: #262033; }
+    #e2-bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #e2-cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #e2-host { position: absolute; left: 200px; top: 560px; width: 680px; height: 1088px; }
+    #e2-titulo { position: absolute; left: 0; top: 436px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -1px; color: #fff;
+      -webkit-text-stroke: 16px #262033; paint-order: stroke fill; text-shadow: 0 8px 0 #262033; opacity: 0; }
+    #e2-titulo .k { color: #FD4A54; }
+    .e2-tarj { position: absolute; width: 270px; height: 250px; background: #fff; border: 7px solid #262033; border-radius: 26px; box-shadow: 0 8px 0 rgba(38,32,51,.3);
+      display: flex; align-items: center; justify-content: center; font-size: 42px; white-space: nowrap; font-weight: 700; letter-spacing: 1px; opacity: 0; }
+    /* las tarjetas van en el costado: el borde derecho de la mitad de abajo lo tapan los botones de Instagram */
+    #e2-t-a { left: 40px; top: 810px; }
+    #e2-t-b { left: 700px; top: 660px; }
+    #e2-pill { position: absolute; left: 190px; top: 1352px; width: 700px; height: 96px; border-radius: 48px; background: #F4B63A; border: 7px solid #262033;
+      box-shadow: 0 8px 0 rgba(38,32,51,.3); display: flex; align-items: center; justify-content: center; font-size: 46px; font-weight: 700; letter-spacing: 1px; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="esc2" data-width="1080" data-height="1920">
+    <!-- SONIDO:INICIO (generado por build/colocar-sonidos.mjs) -->
+    <!-- SONIDO:FIN -->
+    <svg id="e2-bg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1080" height="1920" fill="#FFF1DC" />
+      <rect y="1566" width="1080" height="30" fill="#E6C99B" />
+      <rect y="1596" width="1080" height="324" fill="#EBD5B5" />
+    </svg>
+    <div id="e2-cam" data-layout-allow-overflow>
+      <div id="e2-host"></div>
+      <div id="e2-titulo">¿<span class="k">OPCIÓN A</span> o <span class="k">B</span>?</div>
+      <div class="e2-tarj" id="e2-t-a">OPCIÓN A</div>
+      <div class="e2-tarj" id="e2-t-b">OPCIÓN B</div>
+      <div id="e2-pill">COMENTÁ UNA PALABRA</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const p = Personaje.mount(document.getElementById("e2-host"), { width: "680px", overflow: true, pose: "parado", expr: "neutro", dia: 1 });
+    Personaje.breathe(tl, p, 0, 5.0, 1.6);
+    Personaje.blink(tl, p, 1.0, Personaje.EXPR.neutro.lid);
+    Hab.hablaLinea(tl, p, "02-voto", "esc2", "cerrada");
+
+    // las dos opciones entran una por cada lado; el título primero
+    tl.fromTo("#e2-titulo", { opacity: 0, scale: 0.5, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 0.3);
+    tl.fromTo("#e2-t-a", { opacity: 0, x: -400 }, { opacity: 1, x: 0, duration: 0.3, ease: "back.out(1.6)" }, 0.4);
+    tl.fromTo("#e2-t-b", { opacity: 0, x: 400 }, { opacity: 1, x: 0, duration: 0.3, ease: "back.out(1.6)" }, 0.5);
+    // señala cada opción cuando la voz la nombra (ajustar los tiempos con la voz real)
+    Personaje.poseTo(tl, p, Hab.pose("parado", { "dedo-i": { opacity: 1 } }, Hab.brazo("i", 30, 240, 1)), 1.2, 0.25, "back.out(1.6)");
+    tl.to("#e2-t-a", { scale: 1.12, boxShadow: "0 0 0 12px #F4B63A", duration: 0.15, ease: "power2.out", transformOrigin: "50% 50%" }, 1.3);
+    tl.to("#e2-t-a", { scale: 1, boxShadow: "0 0 0 0px #F4B63A", duration: 0.3, ease: "back.out(2)" }, 1.5);
+    Personaje.poseTo(tl, p, "señalando", 2.2, 0.22, "back.out(1.6)");
+    tl.to("#e2-t-b", { scale: 1.12, boxShadow: "0 0 0 12px #F4B63A", duration: 0.15, ease: "power2.out", transformOrigin: "50% 50%" }, 2.3);
+    tl.to("#e2-t-b", { scale: 1, boxShadow: "0 0 0 0px #F4B63A", duration: 0.3, ease: "back.out(2)" }, 2.5);
+    Personaje.poseTo(tl, p, "parado", 3.2, 0.35, "sine.inOut");
+    // cartel final
+    tl.fromTo("#e2-pill", { opacity: 0, y: 40, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "back.out(2)" }, 2.7);   // el cartel final tiene que quedar >= 2 s en pantalla (el check lo mide)
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["esc2"] = tl;
+  </script>
+</template>

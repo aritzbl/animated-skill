@@ -1,0 +1,46 @@
+/* Personaje: paleta y estado de cada capa de mejora.
+   El estado inicial vive en :root. Los episodios cambian estas variables (ver Personaje.look en personaje.js):
+   no hace falta redibujar nada. 1 = estado inicial, 0 = mejora aplicada. Admite decimales.
+   Para agregar una capa: (1) un grupo en rig/personaje.svg con clase propia y opacity: var(--nombre),
+   (2) la variable acá, (3) la misma variable en BASE_VARS de personaje.js, (4) una mejora en MEJORAS. */
+:root {
+  /* paleta (8 colores + blanco de ojos y dientes) */
+  --p-ink: #262033;
+  --p-skin: #F2C29B;
+  --p-hair: #3A2A25;
+  --p-shirt: #3E8E8A;
+  --p-pants: #4C5B7A;
+  --p-shoes: #D9D3C7;
+  --p-acento: #F4B63A;
+  --p-mugre: #9A5F78;
+  --p-acento2: #F4B63A;
+
+  /* mejoras estéticas (1 = descuidado, 0 = arreglado) */
+  --ojeras: 1;
+  --granos: 1;
+  --pelo-sucio: 1;
+  --pelo-despeinado: 1;
+  --pelo-largo: 1;   /* 0 = pelo cortado */
+  --mechon: 1;       /* el remolino de arriba; 0 = peinado */
+  --pelo-peinado: 0; /* 1 = flequillo prolijo con surcos de peine */
+  --corte-i: 1;      /* solo para animar un corte por lados dentro de un episodio; no va en MEJORAS */
+  --corte-d: 1;
+  --mancha-1: 1;
+  --mancha-2: 1;
+  --mancha-3: 1;
+  --zapa-mugre: 1;
+
+  /* hábito: 1 = lo lleva, 0 = lo dejó */
+  --acc-habito: 1;
+
+  /* identidad: el prop en la mano. 1 = lo lleva, 0 = sin prop */
+  --acc-identidad: 1;
+
+  /* skills (0 = todavía no, 1 = ya lo tiene) */
+  --acc-cuello: 0;
+  --acc-corbata: 0;
+  --acc-credencial: 0;
+  --acc-anteojos: 0;
+  --acc-reloj: 0;
+  --acc-birome: 0;
+}

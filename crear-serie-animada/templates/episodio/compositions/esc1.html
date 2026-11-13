@@ -1,0 +1,56 @@
+<template>
+  <!-- ESCENA PLANTILLA: gancho. Copiala como escN.html y cambiá el contenido; después agregá la escena en build/escenas.json
+       y corré node build/armar-index.mjs. Reglas del contrato de HyperFrames:
+       - un solo timeline PAUSADO por composición, registrado en window.__timelines["<id de la composición>"]
+       - nada de Date.now, Math.random ni repeat: -1; no tweenear display/visibility en elementos .clip
+       - fuentes locales con @font-face a assets/fonts; rutas relativas assets/...
+       - zona segura Reels: nada importante en los 168 px de arriba, ni entre y 1332 y abajo (ahí van los subtítulos y la interfaz) -->
+  <style>
+    @font-face { font-family: "Fuente"; font-weight: 700; src: url("assets/fonts/Fuente-700.woff2") format("woff2"); }
+    #root { position: absolute; inset: 0; overflow: hidden; background: #FFF1DC; font-family: "Fuente", sans-serif; color: #262033; }
+    #e1-bg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #e1-cam { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    /* personaje grande y centrado, recortado a la altura de la cadera por el borde de abajo de la zona de subtítulos */
+    #e1-host { position: absolute; left: 200px; top: 560px; width: 680px; height: 1088px; }
+    #e1-cartel { position: absolute; left: 0; top: 436px; width: 1080px; text-align: center; font-size: 96px; font-weight: 700; letter-spacing: -1px; color: #fff;
+      -webkit-text-stroke: 16px #262033; paint-order: stroke fill; text-shadow: 0 8px 0 #262033; opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="esc1" data-width="1080" data-height="1920">
+    <!-- SONIDO:INICIO (generado por build/colocar-sonidos.mjs) -->
+    <!-- SONIDO:FIN -->
+    <svg id="e1-bg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1080" height="1920" fill="#FFF1DC" />
+      <rect y="1566" width="1080" height="30" fill="#E6C99B" />
+      <rect y="1596" width="1080" height="324" fill="#EBD5B5" />
+    </svg>
+    <div id="e1-cam" data-layout-allow-overflow>
+      <div id="e1-host"></div>
+      <div id="e1-cartel">TÍTULO</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // personaje en su estado inicial (dia: 1 = todavía no se aplicó ninguna mejora). Para otro episodio: dia: N
+    const p = Personaje.mount(document.getElementById("e1-host"), { width: "680px", overflow: true, pose: "parado", expr: "neutro", dia: 1 });
+
+    // idle: respiración y parpadeos (sin pisarse con cambios de expresión)
+    Personaje.breathe(tl, p, 0, 7.0, 1.6);
+    Personaje.blink(tl, p, 1.4, Personaje.EXPR.neutro.lid);
+    Personaje.blink(tl, p, 4.6, Personaje.EXPR.neutro.lid);
+
+    // boca: sigue las palabras de la línea de voz "01-gancho" (Whisper). Si todavía no hay voz importada, no hace nada.
+    Hab.hablaLinea(tl, p, "01-gancho", "esc1", "cerrada");
+
+    // gesto de entrada y expresión
+    Personaje.poseTo(tl, p, "saludo", 0.5, 0.3, "back.out(1.5)");
+    Personaje.wave(tl, p, 0.85, 4, 0.26);
+    Personaje.poseTo(tl, p, "parado", 2.3, 0.4, "sine.inOut");
+    Personaje.exprTo(tl, p, "orgulloso", 2.6, 0.3, "sine.inOut");
+
+    // cartel con rebote
+    tl.fromTo("#e1-cartel", { opacity: 0, scale: 0.5, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 0.3);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["esc1"] = tl;
+  </script>
+</template>

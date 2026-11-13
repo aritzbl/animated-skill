@@ -1,0 +1,10 @@
+{
+  "name": "episodio-{{NN}}",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --no-install hyperframes preview",
+    "check": "npx --no-install hyperframes check",
+    "render": "npx --no-install hyperframes render"
+  }
+}

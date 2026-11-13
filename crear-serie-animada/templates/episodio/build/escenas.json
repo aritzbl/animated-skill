@@ -1,0 +1,9 @@
+{
+  "_nota": "Escenas del episodio (compositions/escN.html). 'inicio' y 'dur' en segundos del episodio; tienen que cubrir 0 a 'duracion' sin huecos. Después de tocar esto: node build/armar-index.mjs",
+  "duracion": 12,
+  "hud": true,
+  "escenas": [
+    { "id": "esc1", "inicio": 0, "dur": 7 },
+    { "id": "esc2", "inicio": 7, "dur": 5 }
+  ]
+}

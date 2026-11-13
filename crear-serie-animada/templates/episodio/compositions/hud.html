@@ -1,0 +1,101 @@
+<template>
+  <style>
+    @font-face { font-family: "Fuente"; font-weight: 400; src: url("assets/fonts/Fuente-400.woff2") format("woff2"); }
+    @font-face { font-family: "Fuente"; font-weight: 700; src: url("assets/fonts/Fuente-700.woff2") format("woff2"); }
+    /* HUD del género "serie con votación": contador de días, barra de progreso, cartel de día y usuario.
+       Zona segura Reels: arranca en y 186 (nada en los 168 px de arriba). */
+    #root { position: absolute; inset: 0; font-family: "Fuente", sans-serif; }
+    #hud-dias { position: absolute; left: 48px; top: 192px; width: 318px; height: 82px; border-radius: 41px; background: #262033;
+      display: flex; align-items: center; padding-left: 22px; gap: 14px; box-shadow: 0 6px 0 rgba(0,0,0,.28); }
+    #hud-dias svg { width: 44px; height: 44px; flex: none; }
+    #hud-num-w { position: relative; width: 66px; height: 62px; flex: none; }
+    #hud-num-w span { position: absolute; left: 0; top: 0; width: 66px; text-align: center; font-size: 56px; font-weight: 700; color: #F4B63A; line-height: 62px; }
+    #hud-n-nuevo { opacity: 0; }
+    #hud-txt { font-size: 36px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: 1px; }
+    #hud-barra { position: absolute; left: 402px; top: 186px; width: 630px; height: 92px; }
+    #hud-etiqueta { position: absolute; left: 0; top: 0; font-size: 30px; font-weight: 700; color: #fff; letter-spacing: 1px;
+      -webkit-text-stroke: 8px #262033; paint-order: stroke fill; }
+    #hud-pct-w { position: absolute; right: 0; top: 0; width: 70px; height: 40px; }
+    #hud-pct-w span { position: absolute; right: 0; top: 0; font-size: 30px; font-weight: 700; color: #F4B63A; line-height: 40px;
+      -webkit-text-stroke: 8px #262033; paint-order: stroke fill; }
+    #hud-p-nuevo { opacity: 0; }
+    #hud-mas { position: absolute; right: 84px; top: -4px; font-size: 34px; font-weight: 700; color: #7CE08A; opacity: 0; line-height: 40px;
+      -webkit-text-stroke: 8px #262033; paint-order: stroke fill; }
+    #hud-pista { position: absolute; left: 0; top: 44px; width: 630px; height: 44px; border-radius: 22px; background: #262033;
+      border: 5px solid #262033; box-shadow: 0 6px 0 rgba(0,0,0,.28); overflow: hidden; }
+    #hud-relleno { position: absolute; left: 0; top: 0; height: 100%; width: 0%; border-radius: 22px; background: #F4B63A; }
+    #hud-dia { position: absolute; left: 390px; top: 300px; width: 300px; height: 112px; border-radius: 28px; background: #F4B63A;
+      border: 8px solid #262033; box-shadow: 0 8px 0 rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center;
+      font-size: 78px; font-weight: 700; color: #262033; letter-spacing: 1px; }
+    #hud-usuario { position: absolute; right: 48px; top: 322px; font-size: 38px; font-weight: 700; color: #fff; letter-spacing: 0.5px;
+      -webkit-text-stroke: 9px #262033; paint-order: stroke fill; }
+  </style>
+  <div id="root" data-composition-id="hud" data-width="1080" data-height="1920">
+    <div id="hud-dias">
+      <svg viewBox="0 0 44 44"><rect x="4" y="8" width="36" height="32" rx="6" fill="#fff"/><rect x="4" y="8" width="36" height="11" rx="5" fill="#D9363E"/><rect x="12" y="2" width="5" height="11" rx="2.5" fill="#fff"/><rect x="27" y="2" width="5" height="11" rx="2.5" fill="#fff"/><rect x="11" y="25" width="7" height="6" rx="1.5" fill="#262033"/><rect x="21" y="25" width="7" height="6" rx="1.5" fill="#262033"/></svg>
+      <div id="hud-num-w"><span id="hud-n-viejo">30</span><span id="hud-n-nuevo">29</span></div><span id="hud-txt">DÍAS</span>
+    </div>
+    <div id="hud-barra">
+      <div id="hud-etiqueta">PROGRESO</div>
+      <div id="hud-pct-w"><span id="hud-p-viejo">0%</span><span id="hud-p-nuevo">4%</span></div>
+      <div id="hud-mas">+4%</div>
+      <div id="hud-pista"><div id="hud-relleno"></div></div>
+    </div>
+    <div id="hud-dia">DÍA 1</div>
+    <div id="hud-usuario">@cuenta</div>
+  </div>
+  <script>
+    // ================= CONFIGURACIÓN DEL HUD (lo único que se toca por episodio) =================
+    const HUD = {
+      cartel: "DÍA 1",            // texto del cartel amarillo (visible desde el segundo 0: sirve de miniatura)
+      usuario: "@cuenta",         // usuario de la cuenta
+      etiqueta: "PROGRESO",       // nombre de la barra (lo decide el usuario)
+      diasViejo: "30",            // contador al empezar el episodio
+      diasNuevo: null,            // si baja en este episodio: "29" (null = no cambia)
+      tDias: null,                // segundo del EPISODIO en que baja (el de la palabra que lo dice, ver build/voz-palabras.json)
+      pctViejo: "0%", pctNuevo: null, // porcentaje de la barra: de qué a qué
+      relleno: null,              // ancho final de la barra, ej. "4%" (null = no sube)
+      tBarra: null,               // segundo del EPISODIO en que sube la barra
+      mas: null,                  // cartelito verde que sube, ej. "+4%"
+    };
+    const set = (id, txt) => { document.getElementById(id).textContent = txt; };
+    set("hud-dia", HUD.cartel); set("hud-usuario", HUD.usuario); set("hud-etiqueta", HUD.etiqueta);
+    set("hud-n-viejo", HUD.diasViejo); set("hud-p-viejo", HUD.pctViejo);
+    if (HUD.diasNuevo) set("hud-n-nuevo", HUD.diasNuevo);
+    if (HUD.pctNuevo) set("hud-p-nuevo", HUD.pctNuevo);
+    if (HUD.mas) set("hud-mas", HUD.mas);
+    document.getElementById("hud-relleno").style.width = HUD.pctViejo;   // la barra arranca en el porcentaje viejo
+
+    const tl = gsap.timeline({ paused: true });
+    // ---- el contador de días baja con un golpe (cruce con opacidad entre dos números)
+    if (HUD.diasNuevo != null && HUD.tDias != null) {
+      const T = HUD.tDias;
+      tl.to("#hud-n-viejo", { y: -30, opacity: 0, duration: 0.2, ease: "power2.in" }, T);
+      tl.fromTo("#hud-n-nuevo", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2.2)" }, T + 0.08);
+      tl.to("#hud-dias", { scale: 1.15, duration: 0.14, ease: "power2.out", transformOrigin: "0% 50%" }, T + 0.1);
+      tl.to("#hud-dias", { scale: 1, duration: 0.3, ease: "back.out(2.4)", transformOrigin: "0% 50%" }, T + 0.24);
+    }
+    // ---- la barra sube
+    if (HUD.relleno && HUD.tBarra != null) {
+      const T = HUD.tBarra;
+      tl.to("#hud-relleno", { width: HUD.relleno, duration: 0.5, ease: "back.out(1.8)" }, T);
+      if (HUD.pctNuevo) {
+        tl.to("#hud-p-viejo", { y: -22, opacity: 0, duration: 0.2, ease: "power2.in" }, T + 0.1);
+        tl.fromTo("#hud-p-nuevo", { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "back.out(2.2)" }, T + 0.2);
+      }
+      tl.to("#hud-barra", { scale: 1.1, duration: 0.14, ease: "power2.out", transformOrigin: "100% 50%" }, T);
+      tl.to("#hud-barra", { scale: 1, duration: 0.35, ease: "back.out(2.4)", transformOrigin: "100% 50%" }, T + 0.14);
+      if (HUD.mas) {
+        tl.fromTo("#hud-mas", { opacity: 0, y: 14, scale: 0.6, transformOrigin: "50% 50%" }, { opacity: 1, y: -6, scale: 1.1, duration: 0.25, ease: "back.out(2)" }, T + 0.1);
+        tl.to("#hud-mas", { opacity: 0, y: -34, duration: 0.6, ease: "power1.in" }, T + 1.3);
+      }
+    }
+    // ---- el cartel respira apenas, para que no quede congelado (ciclos explícitos, sin repeat infinito; cubre ~58 s)
+    tl.fromTo("#hud-dia", { rotation: -3 }, { rotation: -1.5, duration: 1.8, ease: "sine.inOut" }, 0);
+    for (let k = 1; k < 32; k++) {
+      tl.to("#hud-dia", { rotation: k % 2 === 1 ? -3.5 : -1.5, duration: 1.8, ease: "sine.inOut" }, k * 1.8);
+    }
+    window.__timelines = window.__timelines || {};
+    window.__timelines["hud"] = tl;
+  </script>
+</template>

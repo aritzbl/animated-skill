@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Logo de la cuenta</title>
+<!-- LOGO DE PERFIL armado con el rig real (1024x1024; Instagram lo recorta en círculo).
+     Se exporta con:  node logo/exportar.mjs   (necesita un servidor local desde la carpeta de la serie:
+       python -m http.server 8765 --bind 127.0.0.1    y pararlo después).
+     Parámetros por URL para ajustar sin editar: ?txt=30&s=3.1&hx=512&hy=545 ... (ver el objeto P abajo). -->
+<script src="../node_modules/hyperframes/dist/vendor/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<link rel="stylesheet" href="../personaje/assets/personaje.css" />
+<style>
+  @font-face { font-family: "Fuente"; font-weight: 700; src: url("../personaje/assets/fonts/Fuente-700.woff2") format("woff2"); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1024px; height: 1024px; overflow: hidden; background: #FFF1DC; }
+  #logo { position: relative; width: 1024px; height: 1024px; background: #FFF1DC; overflow: hidden; }
+  #badge { position: absolute; inset: 0; clip-path: circle(var(--R, 470px) at 512px 512px); }
+  #texto { position: absolute; left: 0; top: 0; width: 1024px; height: 1024px; }
+  #texto text { font-family: "Fuente", sans-serif; font-weight: 700; }
+  #host { position: absolute; }
+  /* solo cabeza y hombros: sin piernas ni sombra */
+  #host [data-part="pierna-i"], #host [data-part="pierna-d"], #host [data-part="sombra"] { display: none; }
+  #aro { position: absolute; left: 0; top: 0; width: 1024px; height: 1024px; }
+</style>
+</head>
+<body>
+<div id="logo">
+  <div id="badge">
+    <svg id="texto" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="host"></div>
+  </div>
+  <svg id="aro" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<script src="../personaje/assets/personaje-markup.js"></script>
+<script src="../personaje/assets/personaje.js"></script>
+<script>
+(function () {
+  var P = Object.assign({
+    R: 470,            // radio de la insignia
+    ring: 22,          // grosor del aro
+    txt: "30",         // el número o palabra grande de arriba (ej. los días de la serie); "" para no poner
+    tx: 512, ty: 380, fs: 330, ol: 30,   // posición, tamaño de letra y grosor del contorno del texto
+    s: 3.1, hx: 512, hy: 545,            // escala del personaje y dónde cae el centro de su cabeza (200,150 del rig)
+    mdx: 4, mdy: 18, ms: 1.2,            // el prop de identidad sube hasta el mentón
+  }, Object.fromEntries(new URLSearchParams(location.search)));
+  ["R", "ring", "tx", "ty", "fs", "ol", "s", "hx", "hy", "mdx", "mdy", "ms"].forEach(function (k) { P[k] = parseFloat(P[k]); });
+
+  var INK = "#262033", ACENTO = "#F4B63A";
+  var NS = "http://www.w3.org/2000/svg";
+
+  /* ---------- texto grande: contorno oscuro + relleno de acento ---------- */
+  if (P.txt) {
+    var tex = document.getElementById("texto");
+    [["stroke", INK, P.ol * 2], ["fill", ACENTO, 0]].forEach(function (a) {
+      var t = document.createElementNS(NS, "text");
+      t.setAttribute("x", P.tx); t.setAttribute("y", P.ty); t.setAttribute("text-anchor", "middle"); t.setAttribute("font-size", P.fs);
+      t.textContent = P.txt;
+      if (a[0] === "stroke") { t.setAttribute("fill", INK); t.setAttribute("stroke", INK); t.setAttribute("stroke-width", a[2]); t.setAttribute("stroke-linejoin", "round"); }
+      else t.setAttribute("fill", a[1]);
+      tex.appendChild(t);
+    });
+  }
+
+  /* ---------- el personaje (el rig real), solo cabeza y hombros ---------- */
+  // pose propia: el prop de identidad sube hasta el mentón, la mano del brazo lo acompaña
+  var r = Personaje.ik("d", 238 + P.mdx, 226 + P.mdy + 10, -1);
+  Personaje.POSES.logo = {
+    cabeza: { rotation: -3 },
+    "prop-mano": { opacity: 0 }, "prop-sorbo": { opacity: 1 },
+    "brazo-d": { rotation: r.brazo }, "antebrazo-d": { rotation: r.antebrazo },
+  };
+  var host = document.getElementById("host");
+  host.style.left = (P.hx - 200 * P.s) + "px";
+  host.style.top = (P.hy - 150 * P.s) + "px";
+  var g = Personaje.mount(host, { width: (400 * P.s) + "px", overflow: true, pose: "logo", expr: "cansado", boca: "ladeada", dia: 1 });
+  Personaje.bocaSet(g, "ladeada");
+  Personaje.part(g, "brazo-d").style.display = "none";   // el brazo entero queda fuera de cuadro
+  var ms = Personaje.part(g, "prop-sorbo");
+  // antebrazo que sube desde abajo hasta la mano (el codo queda fuera del círculo)
+  [["l-ink", 38], ["l-skin", 26]].map(function (a) {
+    var e = document.createElementNS(NS, "path");
+    e.setAttribute("d", "M238 216 L224 340");
+    e.setAttribute("class", a[0]); e.setAttribute("stroke-width", a[1]);
+    return e;
+  }).reverse().forEach(function (e) { ms.insertBefore(e, ms.firstChild); });
+  gsap.set(ms, { x: P.mdx, y: P.mdy, scale: P.ms, svgOrigin: "238 216" });
+
+  /* ---------- aro oscuro de la insignia ---------- */
+  var aro = document.getElementById("aro");
+  var c = document.createElementNS(NS, "circle");
+  c.setAttribute("cx", 512); c.setAttribute("cy", 512);
+  c.setAttribute("r", P.R - P.ring / 2);
+  c.setAttribute("fill", "none"); c.setAttribute("stroke", INK); c.setAttribute("stroke-width", P.ring);
+  aro.appendChild(c);
+  document.getElementById("badge").style.setProperty("--R", P.R + "px");
+  window.__listo = true;
+})();
+</script>
+</body>
+</html>

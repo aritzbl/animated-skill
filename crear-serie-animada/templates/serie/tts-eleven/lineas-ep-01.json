@@ -1,0 +1,12 @@
+[
+  {
+    "id": "01-gancho",
+    "sin": "Este es Nombre. Veintiocho años. Tiene treinta días para cambiar su vida, y hoy arranca. ¿Qué arreglamos primero?",
+    "con": "[excited] Este es Nombre. Veintiocho años. [sarcastic] Tiene treinta días para cambiar su vida, [excited] y hoy arranca. ¿Qué arreglamos primero?"
+  },
+  {
+    "id": "02-voto",
+    "sin": "Opción A u opción B. Comenten una palabra.",
+    "con": "[cheerful] Opción A u opción B. [excited] Comenten una palabra."
+  }
+]

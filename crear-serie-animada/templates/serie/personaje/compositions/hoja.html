@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/personaje.css" />
+    <style>
+      /* Inter (licencia OFL) copiada de los archivos locales de HyperFrames: no se descarga nada. */
+      @font-face { font-family: "Fuente"; font-weight: 400; src: url("assets/fonts/Fuente-400.woff2") format("woff2"); }
+      @font-face { font-family: "Fuente"; font-weight: 700; src: url("assets/fonts/Fuente-700.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #FFF4DE; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Fuente", sans-serif; color: #262033; }
+      .titulo { position: absolute; left: 30px; top: 18px; font-size: 30px; font-weight: 700; }
+      .sub { position: absolute; left: 30px; top: 54px; font-size: 16px; color: #6a6478; }
+      .celda { position: absolute; background: #fff; border-radius: 14px; overflow: hidden; }
+      .celda svg { position: absolute; left: 0; top: 0; }
+      .rot { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font-size: 15px; font-weight: 700; }
+      .sw { position: absolute; width: 62px; height: 62px; border-radius: 12px; border: 3px solid #262033; }
+      .swl { position: absolute; width: 90px; text-align: center; font-size: 13px; font-weight: 700; }
+      .bloque { position: absolute; font-size: 16px; font-weight: 700; }
+      .pie { position: absolute; left: 30px; bottom: 14px; font-size: 15px; color: #6a6478; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="hoja" data-start="0" data-duration="2" data-width="1080" data-height="1920">
+      <div id="lamina" class="clip" data-start="0" data-duration="2" data-track-index="0" data-layout-allow-overflow>
+        <div class="titulo" id="hoja-titulo">NOMBRE DEL PERSONAJE · hoja de personaje</div>
+        <div class="sub">Rig 2D por piezas · 8 colores + blanco · formato vertical 1080×1920 (la paleta sale de assets/personaje.css)</div>
+
+        <!-- Fila 1: frente, 3/4 y estado final -->
+        <div class="celda" data-x="30" data-y="84" data-w="330" data-h="574" data-label="FRENTE · ESTADO INICIAL" data-pose="parado" data-expr="neutro" data-giro="frente"></div>
+        <div class="celda" data-x="375" data-y="84" data-w="330" data-h="574" data-label="3/4 (giro de cabeza)" data-pose="parado" data-expr="neutro" data-giro="tresCuartosD"></div>
+        <div class="celda" data-x="720" data-y="84" data-w="330" data-h="574" data-label="FRENTE · ESTADO FINAL" data-pose="parado" data-expr="orgulloso" data-giro="frente" data-dia="30"></div>
+
+        <!-- Fila 2: 6 expresiones -->
+        <div class="bloque" style="left:30px; top:668px">Expresiones</div>
+        <div class="celda" data-x="30" data-y="692" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="neutro" data-expr="neutro"></div>
+        <div class="celda" data-x="202" data-y="692" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="sorpresa" data-expr="sorpresa"></div>
+        <div class="celda" data-x="374" data-y="692" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="vergüenza" data-expr="verguenza"></div>
+        <div class="celda" data-x="546" data-y="692" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="bronca" data-expr="bronca"></div>
+        <div class="celda" data-x="718" data-y="692" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="cansado" data-expr="cansado"></div>
+        <div class="celda" data-x="890" data-y="692" data-w="160" data-h="190" data-vb="100 60 200 190" data-label="orgulloso" data-expr="orgulloso"></div>
+
+        <!-- Fila 3: 4 bocas de hablar y paleta -->
+        <div class="bloque" style="left:30px; top:892px">Boca al hablar</div>
+        <div class="celda" data-x="30" data-y="916" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="cerrada (M B P)" data-expr="neutro" data-boca="cerrada"></div>
+        <div class="celda" data-x="202" data-y="916" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="abierta (A)" data-expr="neutro" data-boca="abierta"></div>
+        <div class="celda" data-x="374" data-y="916" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="ancha (E I)" data-expr="neutro" data-boca="ancha"></div>
+        <div class="celda" data-x="546" data-y="916" data-w="166" data-h="190" data-vb="100 60 200 190" data-label="redonda (O U)" data-expr="neutro" data-boca="redonda"></div>
+
+        <div class="bloque" style="left:742px; top:892px">Paleta</div>
+        <div id="paleta"></div>
+        <div class="swl" style="left:742px; top:1100px; width:300px; text-align:left">+ blanco (ojos y dientes)</div>
+
+<!-- Fila 4: 5 poses -->
+        <div class="bloque" style="left:30px; top:1128px">Poses</div>
+        <div class="celda" data-x="30" data-y="1152" data-w="163" data-h="346" data-label="parado" data-pose="parado" data-expr="neutro"></div>
+        <div class="celda" data-x="199" data-y="1152" data-w="163" data-h="346" data-label="sentado" data-pose="sentado" data-expr="cansado"></div>
+        <div class="celda" data-x="368" data-y="1152" data-w="163" data-h="346" data-label="caminando" data-pose="caminando" data-expr="neutro" data-giro="tresCuartosD"></div>
+        <div class="celda" data-x="537" data-y="1152" data-w="163" data-h="346" data-label="señalando" data-pose="señalando" data-expr="orgulloso" data-giro="tresCuartosD"></div>
+        <div class="celda" data-x="706" data-y="1152" data-w="163" data-h="346" data-label="cabeza entre manos" data-pose="cabeza-entre-manos" data-expr="cansado"></div>
+        <div class="celda" data-x="875" data-y="1152" data-w="163" data-h="346" data-label="sorbo" data-pose="sorbo" data-expr="neutro"></div>
+
+        <!-- Fila 5: look por día -->
+        <div class="bloque" style="left:30px; top:1508px">Cómo cambia el personaje (tabla de mejoras en hoja-mejoras)</div>
+        <div class="celda" data-x="30" data-y="1532" data-w="250" data-h="350" data-vb="70 60 260 350" data-label="DÍA 1 · estado inicial" data-expr="cansado" data-dia="1"></div>
+        <div class="celda" data-x="290" data-y="1532" data-w="250" data-h="350" data-vb="70 60 260 350" data-label="DÍA 4 · pelo, ropa y ojeras" data-expr="neutro" data-dia="4"></div>
+        <div class="celda" data-x="550" data-y="1532" data-w="250" data-h="350" data-vb="70 60 260 350" data-label="DÍA 12 · aseado y derecho" data-expr="neutro" data-dia="12"></div>
+        <div class="celda" data-x="810" data-y="1532" data-w="240" data-h="350" data-vb="70 60 260 350" data-label="DÍA 30 · look final" data-expr="orgulloso" data-dia="30"></div>
+        <div class="pie">izq / der = lado de la pantalla, no del personaje</div>
+      </div>
+    </div>
+
+    <script src="assets/personaje-markup.js"></script>
+    <script src="assets/personaje.js"></script>
+    <script>
+      // Cambiar por el nombre del personaje:
+      var NOMBRE_PERSONAJE = "NOMBRE DEL PERSONAJE";
+      document.getElementById("hoja-titulo").textContent = NOMBRE_PERSONAJE + " · hoja de personaje";
+      // paleta: se lee de las variables CSS (assets/personaje.css)
+      (function () {
+        var cs = getComputedStyle(document.documentElement), cont = document.getElementById("paleta");
+        ["ink", "skin", "hair", "shirt", "pants", "shoes", "acento", "mugre"].forEach(function (k, i) {
+          var hex = cs.getPropertyValue("--p-" + k).trim(), x = 742 + (i % 4) * 77, y = 922 + Math.floor(i / 4) * 94;
+          var sw = document.createElement("div"); sw.className = "sw"; sw.style.cssText = "left:" + x + "px; top:" + y + "px; background:" + hex;
+          var lb = document.createElement("div"); lb.className = "swl"; lb.style.cssText = "left:" + (x - 14) + "px; top:" + (y + 66) + "px"; lb.textContent = hex;
+          cont.appendChild(sw); cont.appendChild(lb);
+        });
+      })();
+      document.querySelectorAll(".celda").forEach(function (c, n) {
+        var w = +c.dataset.w, h = +c.dataset.h;
+        c.style.left = c.dataset.x + "px";
+        c.style.top = c.dataset.y + "px";
+        c.style.width = w + "px";
+        c.style.height = h + "px";
+        var rot = document.createElement("div");
+        rot.className = "rot";
+        rot.textContent = c.dataset.label;
+        var svg = Personaje.mount(c, {
+          uid: "c" + n,
+          viewBox: c.dataset.vb,
+          width: w + "px",
+          height: (h - 26) + "px",
+          pose: c.dataset.pose || "parado",
+          expr: c.dataset.expr || "neutro",
+          boca: c.dataset.boca,
+          giro: c.dataset.giro || "frente",
+          dia: c.dataset.dia ? +c.dataset.dia : undefined,
+        });
+        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        c.appendChild(rot);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      tl.to({}, { duration: 2 }, 0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["hoja"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

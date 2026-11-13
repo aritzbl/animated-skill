@@ -1,0 +1,4 @@
+{
+  "_nota": "Qué toma usa cada línea. _carpeta = subcarpeta de <serie>/Guiones/voces/ donde están las tomas (ej. ep-01-guia = voz guía de Windows, ep-01-eleven = ElevenLabs). Cada línea: 'nombre-de-la-línea': 'nombre-de-la-toma' (sin .mp3; si existe '<línea>.mp3' en esa carpeta se usa directo). Anotá acá por qué elegiste cada toma (ranking objetivo o a mano).",
+  "_carpeta": "ep-01-guia"
+}

@@ -1,0 +1,10 @@
+{
+  "_nota": "Efectos de sonido por escena. 't' = segundo LOCAL de la escena (el HUD usa segundos del episodio). 's' = archivo de assets/sfx (sin .wav). 'v' = volumen (1 = tal cual). 'd' = duración si hay que cortarlo. 'n' y 'cada' repiten el efecto. Se aplica con: node build/colocar-sonidos.mjs",
+  "esc1": [
+    { "s": "whoosh", "t": 0.3, "v": 0.35 }
+  ],
+  "esc2": [
+    { "s": "pop", "t": 0.4, "v": 0.5 },
+    { "s": "ding", "t": 1.2, "v": 0.5 }
+  ]
+}

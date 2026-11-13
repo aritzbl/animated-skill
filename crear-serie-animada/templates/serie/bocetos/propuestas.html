@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Propuestas de protagonista</title>
+<!-- PÁGINA DE 3 PROPUESTAS DE PERSONAJE (fase 2 de la skill crear-serie-animada).
+     Cómo usarla: reemplazá los 3 dibujos <svg> por las propuestas reales (mismo viewBox 0 0 400 640, así el elegido pasa casi directo al rig),
+     cambiá los textos de cada tarjeta (nombre, qué lo distingue, defectos, accesorio identitario) y las paletas pA / pB / pC.
+     Cada propuesta tiene que ser DISTINTA en silueta, no solo en color. Se abre con el navegador; para sacar una captura usá el Chrome headless
+     de HyperFrames o Playwright (no hace falta servidor, es un archivo suelto sin dependencias). Los dibujos de abajo son siluetas de ejemplo. -->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1800px; background: #FBF6EC; font-family: "Segoe UI", Arial, sans-serif; color: #262033; }
+  h1 { font-size: 34px; padding: 28px 40px 0; }
+  .sub { font-size: 20px; padding: 6px 40px 0; color: #6a6478; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 24px 40px 40px; }
+  .card { background: #fff; border-radius: 22px; padding: 22px 24px 24px; box-shadow: 0 2px 0 #e6dfd0; }
+  .card h2 { font-size: 28px; margin-bottom: 2px; }
+  .card .tag { font-size: 17px; color: #6a6478; margin-bottom: 8px; }
+  svg { width: 100%; height: auto; display: block; background: #FFF4DE; border-radius: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 14px 0 10px; }
+  .chip { display: flex; align-items: center; gap: 6px; font-size: 14px; font-family: Consolas, monospace; }
+  .chip i { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #262033; display: inline-block; }
+  ul { list-style: none; font-size: 17px; line-height: 1.38; }
+  li { margin-top: 6px; }
+  li b { color: #262033; }
+
+  /* paletas: 8 colores + blanco. CAMBIAR en cada propuesta (y evitar parecerse al personaje de la cuenta de referencia) */
+  .pA { --ink:#262033; --skin:#F2C29B; --hair:#3A2A25; --shirt:#3E8E8A; --pants:#4C5B7A; --shoes:#D9D3C7; --acento:#F4B63A; --mugre:#9A5F78; }
+  .pB { --ink:#16213A; --skin:#F0BE96; --hair:#5A3E36; --shirt:#C0504D; --pants:#55587A; --shoes:#E9ECEF; --acento:#7FB069; --mugre:#C9566B; }
+  .pC { --ink:#2B2118; --skin:#F4C7A1; --hair:#6B3F2A; --shirt:#E8A33D; --pants:#8A8F99; --shoes:#E6E1D6; --acento:#3FA37A; --mugre:#B0607A; }
+
+  .s { stroke: var(--ink); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+  .t { stroke: var(--ink); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+  .n { fill: none; }
+  .skin { fill: var(--skin); } .hair { fill: var(--hair); } .shirt { fill: var(--shirt); }
+  .pants { fill: var(--pants); } .shoes { fill: var(--shoes); } .acento { fill: var(--acento); }
+  .mugre { fill: var(--mugre); } .white { fill: #fff; } .inkf { fill: var(--ink); }
+  .l-ink { stroke: var(--ink); fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .l-skin { stroke: var(--skin); fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .l-shirt { stroke: var(--shirt); fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<h1>Protagonista de "NOMBRE DE LA SERIE": 3 propuestas</h1>
+<div class="sub">EDAD, situación, personalidad. Bocetos planos, contorno grueso, 8 colores + blanco. Diseño original, sin copiar a nadie.</div>
+
+<div class="grid">
+
+<!-- ============ PROPUESTA A ============ -->
+<div class="card pA">
+<h2>A · La Pera</h2>
+<div class="tag">Silueta de pera: hombros angostos, panza ancha, piernas cortas</div>
+<svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="200" cy="604" rx="130" ry="12" fill="#262033" opacity=".12"/>
+  <path d="M160 476 L160 560 M240 476 L240 560" class="l-ink" stroke-width="56"/>
+  <path d="M160 476 L160 560 M240 476 L240 560" class="l-skin" stroke-width="44"/>
+  <path d="M126 560 Q124 538 160 540 Q194 542 194 566 Q196 594 162 596 L134 594 Q120 590 126 560Z" class="shoes s"/>
+  <path d="M274 560 Q276 538 240 540 Q206 542 206 566 Q204 594 238 596 L266 594 Q280 590 274 560Z" class="shoes s"/>
+  <path d="M150 218 Q200 202 250 218 Q284 262 294 320 Q300 380 286 414 Q200 428 114 414 Q100 380 106 320 Q116 262 150 218Z" class="shirt s"/>
+  <path d="M152 240 L130 292 L122 356 M248 240 L270 292 L278 356" class="l-ink" stroke-width="40"/>
+  <path d="M152 240 L130 292 L122 356 M248 240 L270 292 L278 356" class="l-shirt" stroke-width="28"/>
+  <circle cx="121" cy="372" r="17" class="skin s"/><circle cx="279" cy="372" r="17" class="skin s"/>
+  <ellipse cx="200" cy="150" rx="62" ry="58" class="skin s"/>
+  <path d="M136 150 Q128 96 176 84 Q232 76 264 120 Q270 140 266 152 Q256 118 232 112 Q214 126 196 116 Q168 126 156 152 Q150 156 136 150Z" class="hair s"/>
+  <ellipse cx="178" cy="154" rx="13" ry="14" class="white t"/><ellipse cx="222" cy="154" rx="13" ry="14" class="white t"/>
+  <circle cx="180" cy="159" r="5.5" class="inkf"/><circle cx="224" cy="159" r="5.5" class="inkf"/>
+  <path d="M162 141 L192 134 M208 134 L238 141" class="n s"/><path d="M186 188 Q200 194 214 186" class="n t"/>
+</svg>
+<div class="chips" data-paleta></div>
+<ul>
+  <li><b>Qué lo distingue:</b> …</li>
+  <li><b>Defectos y manías:</b> …</li>
+  <li><b>Accesorio identitario:</b> …</li>
+  <li><b>Riesgo de parecerse a:</b> …</li>
+</ul>
+</div>
+
+<!-- ============ PROPUESTA B ============ -->
+<div class="card pB">
+<h2>B · El Alto Flaco</h2>
+<div class="tag">Silueta alta y angosta, cuello largo, brazos largos</div>
+<svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="200" cy="604" rx="110" ry="12" fill="#262033" opacity=".12"/>
+  <path d="M176 400 L176 566 M224 400 L224 566" class="l-ink" stroke-width="40"/>
+  <path d="M176 400 L176 566 M224 400 L224 566" class="l-skin" stroke-width="28"/>
+  <path d="M150 570 Q148 548 178 550 Q204 552 204 574 Q206 598 176 598 L156 596 Q144 592 150 570Z" class="shoes s"/>
+  <path d="M250 570 Q252 548 222 550 Q196 552 196 574 Q194 598 224 598 L244 596 Q256 592 250 570Z" class="shoes s"/>
+  <path d="M156 230 Q200 216 244 230 Q262 290 258 400 Q200 410 142 400 Q138 290 156 230Z" class="shirt s"/>
+  <path d="M154 244 L124 330 L116 420 M246 244 L276 330 L284 420" class="l-ink" stroke-width="34"/>
+  <path d="M154 244 L124 330 L116 420 M246 244 L276 330 L284 420" class="l-shirt" stroke-width="22"/>
+  <circle cx="115" cy="436" r="15" class="skin s"/><circle cx="285" cy="436" r="15" class="skin s"/>
+  <rect x="186" y="186" width="28" height="44" class="skin s"/>
+  <ellipse cx="200" cy="140" rx="50" ry="60" class="skin s"/>
+  <path d="M150 128 Q148 70 200 68 Q252 70 250 128 Q232 100 200 104 Q168 100 150 128Z" class="hair s"/>
+  <ellipse cx="182" cy="146" rx="11" ry="12" class="white t"/><ellipse cx="218" cy="146" rx="11" ry="12" class="white t"/>
+  <circle cx="184" cy="150" r="5" class="inkf"/><circle cx="220" cy="150" r="5" class="inkf"/>
+  <path d="M168 132 L194 128 M206 128 L232 132" class="n s"/><path d="M188 178 Q200 184 212 176" class="n t"/>
+</svg>
+<div class="chips" data-paleta></div>
+<ul>
+  <li><b>Qué lo distingue:</b> …</li>
+  <li><b>Defectos y manías:</b> …</li>
+  <li><b>Accesorio identitario:</b> …</li>
+  <li><b>Riesgo de parecerse a:</b> …</li>
+</ul>
+</div>
+
+<!-- ============ PROPUESTA C ============ -->
+<div class="card pC">
+<h2>C · El Cabezón</h2>
+<div class="tag">Cabeza enorme, cuerpo chico, expresivo de lejos</div>
+<svg viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="200" cy="604" rx="110" ry="12" fill="#262033" opacity=".12"/>
+  <path d="M170 500 L170 568 M230 500 L230 568" class="l-ink" stroke-width="44"/>
+  <path d="M170 500 L170 568 M230 500 L230 568" class="l-skin" stroke-width="32"/>
+  <path d="M140 570 Q140 548 172 550 Q198 552 198 574 Q200 598 170 598 L148 596 Q136 592 140 570Z" class="shoes s"/>
+  <path d="M260 570 Q260 548 228 550 Q202 552 202 574 Q200 598 230 598 L252 596 Q264 592 260 570Z" class="shoes s"/>
+  <path d="M146 340 Q200 326 254 340 Q276 400 268 508 Q200 520 132 508 Q124 400 146 340Z" class="shirt s"/>
+  <path d="M148 360 L124 420 L130 470 M252 360 L276 420 L270 470" class="l-ink" stroke-width="34"/>
+  <path d="M148 360 L124 420 L130 470 M252 360 L276 420 L270 470" class="l-shirt" stroke-width="22"/>
+  <circle cx="131" cy="486" r="15" class="skin s"/><circle cx="269" cy="486" r="15" class="skin s"/>
+  <ellipse cx="200" cy="190" rx="116" ry="106" class="skin s"/>
+  <path d="M96 170 Q92 76 200 70 Q308 76 304 170 Q280 126 236 130 Q200 146 164 130 Q120 126 96 170Z" class="hair s"/>
+  <ellipse cx="160" cy="196" rx="22" ry="24" class="white t"/><ellipse cx="240" cy="196" rx="22" ry="24" class="white t"/>
+  <circle cx="164" cy="204" r="9" class="inkf"/><circle cx="244" cy="204" r="9" class="inkf"/>
+  <path d="M130 166 L184 156 M216 156 L270 166" class="n s"/><path d="M170 252 Q200 270 232 250" class="n t"/>
+</svg>
+<div class="chips" data-paleta></div>
+<ul>
+  <li><b>Qué lo distingue:</b> …</li>
+  <li><b>Defectos y manías:</b> …</li>
+  <li><b>Accesorio identitario:</b> …</li>
+  <li><b>Riesgo de parecerse a:</b> …</li>
+</ul>
+</div>
+
+</div>
+<script>
+  // chips de paleta generados desde las variables CSS de cada tarjeta
+  document.querySelectorAll(".card").forEach(function (card) {
+    var cs = getComputedStyle(card), cont = card.querySelector("[data-paleta]");
+    ["ink", "skin", "hair", "shirt", "pants", "shoes", "acento", "mugre"].forEach(function (k) {
+      var hex = cs.getPropertyValue("--" + k).trim(), c = document.createElement("span");
+      c.className = "chip"; c.innerHTML = '<i style="background:' + hex + '"></i>' + k + " " + hex;
+      cont.appendChild(c);
+    });
+  });
+</script>
+</body>
+</html>
